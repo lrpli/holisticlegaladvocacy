@@ -24,46 +24,34 @@ if (contactForm && formStatus) {
   contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const endpoint = contactForm.getAttribute('action') || '';
-    if (endpoint.includes('your-form-id')) {
-      formStatus.textContent = 'Formspree endpoint is not configured yet. Replace "your-form-id" to activate submission.';
+    const recipient = contactForm.getAttribute('data-recipient') || 'info@holisticlegaladvocacy.us';
+    const subject = contactForm.querySelector('input[name="_subject"]')?.value || 'Website inquiry';
+    const name = contactForm.querySelector('#name')?.value.trim() || '';
+    const email = contactForm.querySelector('#email')?.value.trim() || '';
+    const organization = contactForm.querySelector('#organization')?.value.trim() || 'Not provided';
+    const topic = contactForm.querySelector('#topic')?.value || '';
+    const message = contactForm.querySelector('#message')?.value.trim() || '';
+
+    if (!name || !email || !topic || !message) {
+      formStatus.textContent = 'Please complete all required fields before sending.';
       formStatus.className = 'form-status error';
       return;
     }
 
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    const formData = new FormData(contactForm);
+    const body = [
+      `Full Name: ${name}`,
+      `Email Address: ${email}`,
+      `Organization: ${organization}`,
+      `Topic: ${topic}`,
+      '',
+      'Message:',
+      message
+    ].join('\n');
 
-    try {
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
-      }
+    const mailtoUrl = `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        contactForm.reset();
-        formStatus.textContent = 'Thank you. Your message has been submitted successfully.';
-        formStatus.className = 'form-status success';
-      } else {
-        formStatus.textContent = 'Submission failed. Please try again or email info@holisticlegaladvocacy.us.';
-        formStatus.className = 'form-status error';
-      }
-    } catch (error) {
-      formStatus.textContent = 'Network error. Please try again shortly or email info@holisticlegaladvocacy.us.';
-      formStatus.className = 'form-status error';
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit Message';
-      }
-    }
+    formStatus.textContent = 'Your email app should open now. If it did not, please email info@holisticlegaladvocacy.us directly.';
+    formStatus.className = 'form-status success';
   });
 }

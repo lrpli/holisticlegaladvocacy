@@ -9,7 +9,7 @@ Multi-page nonprofit website for HOLISTIC LEGAL ADVOCACY.
 - `services.html` - Programs overview
 - `news.html` - News and updates
 - `cases.html` - Case studies
-- `contact.html` - Contact page with Formspree-ready submission form
+- `contact.html` - Contact page with no-signup email submission form
 
 ## Required Organization Info Included
 
@@ -20,25 +20,17 @@ Multi-page nonprofit website for HOLISTIC LEGAL ADVOCACY.
 - Contact Email: `info@holisticlegaladvocacy.us`
 - Official Website: `https://holisticlegaladvocacy.us`
 
-## Formspree Setup
+## Contact Form (No Signup Required)
 
-The contact form is already wired for Formspree and uses JavaScript fetch submission with success/error feedback.
+The contact form does not depend on Formspree or any other third-party account.
 
-1. Create a form endpoint in Formspree.
-2. Open `contact.html`.
-3. Replace:
+How it works:
 
-```html
-action="https://formspree.io/f/your-form-id"
-```
+1. Visitor fills out the form on `contact.html`.
+2. On submit, JavaScript builds a pre-filled email.
+3. The user's local email app opens a draft addressed to `info@holisticlegaladvocacy.us`.
 
-with your real endpoint, for example:
-
-```html
-action="https://formspree.io/f/abcdwxyz"
-```
-
-4. Save and deploy.
+If the browser/device has no default email app configured, users can still send manually to `info@holisticlegaladvocacy.us`.
 
 ## Run Locally
 
